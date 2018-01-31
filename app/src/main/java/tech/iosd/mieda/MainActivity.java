@@ -1,9 +1,14 @@
 package tech.iosd.mieda;
 
+import android.Manifest;
+import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.media.MediaRecorder;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
-import android.util.Log;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -15,12 +20,15 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
+import android.widget.Toast;
+
+import java.io.IOException;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
     private boolean isFabOpen = false;
-    private FloatingActionButton fab, fab1, fab2;
+    private FloatingActionButton fab, fabCamera, fabAudio;
     private Animation fab_open,fab_close,rotate_forward,rotate_backward;
 
     @Override
@@ -37,18 +45,18 @@ public class MainActivity extends AppCompatActivity
                 animateFAB();
             }
         });
-        fab1 = findViewById(R.id.fab1);
-        fab1.setOnClickListener(new View.OnClickListener() {
+        fabCamera = findViewById(R.id.fabCamera);
+        fabCamera.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
             }
         });
-        fab2 = findViewById(R.id.fab2);
-        fab2.setOnClickListener(new View.OnClickListener() {
+        fabAudio = findViewById(R.id.fabAudio);
+        fabAudio.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                startActivity(new Intent(MainActivity.this,AudioActivity.class));
             }
         });
         fab_open = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.fab_open);
@@ -116,7 +124,7 @@ public class MainActivity extends AppCompatActivity
 
         }
 
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        DrawerLayout drawer = findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
     }
@@ -126,23 +134,19 @@ public class MainActivity extends AppCompatActivity
         if(isFabOpen){
 
             fab.startAnimation(rotate_backward);
-            fab1.startAnimation(fab_close);
-            fab2.startAnimation(fab_close);
-            fab1.setClickable(false);
-            fab2.setClickable(false);
+            fabCamera.startAnimation(fab_close);
+            fabAudio.startAnimation(fab_close);
+            fabCamera.setClickable(false);
+            fabAudio.setClickable(false);
             isFabOpen = false;
-            Log.d("Raj", "close");
-
         } else {
 
             fab.startAnimation(rotate_forward);
-            fab1.startAnimation(fab_open);
-            fab2.startAnimation(fab_open);
-            fab1.setClickable(true);
-            fab2.setClickable(true);
+            fabCamera.startAnimation(fab_open);
+            fabAudio.startAnimation(fab_open);
+            fabCamera.setClickable(true);
+            fabAudio.setClickable(true);
             isFabOpen = true;
-            Log.d("Raj","open");
-
         }
     }
 }
